@@ -1,0 +1,14 @@
+{
+  "name": "Study Smarter - ادرس بذكاء",
+  "short_name": "Study Smarter",
+  "description": "مخطط الأيام الدراسية - وزّع مراجعتك بذكاء",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060b18",
+  "theme_color": "#2196f3",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "https://studysmarter.pages.dev/logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "https://studysmarter.pages.dev/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
