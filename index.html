@@ -898,48 +898,48 @@ async function buildDetail(fmt){
   tpl.innerHTML=`<div class="pd-top-hdr"><div class="pd-top-hdr-grd"></div><div class="pd-top-hdr-in"><div class="pd-top-title">الجدول الدراسي</div><div class="pd-top-right"><div class="pd-top-count">${subjects.length} مواد دراسية</div><div class="pd-top-sub">${titleStr}</div></div></div><div class="pd-top-hdr-line"></div></div><div class="pd-cols">${colsHTML}</div><div class="pd-note"><span>○</span><span class="pd-note-txt">المربع الفارغ أمام كل يوم — ضع علامة ✓ أو لوّنه بعد إتمام مراجعة ذلك اليوم عند الطباعة</span></div><div class="pd-foot"><span class="pd-foot-l">© جميع الحقوق محفوظة · x150ll · ${today}</span><span class="pd-foot-r">https://studysmarter.pages.dev</span></div>`;
 
   /* Show tpl off-screen to measure row positions accurately */
-  tpl.style.cssText='position:fixed;left:-9999px;top:0;display:block;width:900px;';
+  tpl.style.cssText='position:fixed;left:-9999px;top:0;display:block;width:900px;visibility:hidden;';
   await document.fonts.ready;
-  await new Promise(r=>setTimeout(r,160));
+  await new Promise(r=>setTimeout(r,180));
 
-  /* Collect safe cut points:
-     Rule 1: safe AFTER every day-row (bottom edge)
-     Rule 2: safe BEFORE every subject header (top edge - small margin)
-     Rule 3: NEVER cut inside a header's vertical range → tracked as forbidden zones */
+  /* Use offsetTop (relative to tpl) — works correctly off-screen unlike getBoundingClientRect */
+  function getTopRelToTpl(el){
+    let t=0,cur=el;
+    while(cur&&cur!==tpl){t+=cur.offsetTop;cur=cur.offsetParent;}
+    return t;
+  }
+
   const hdrEls=[...tpl.querySelectorAll('[data-hdr]')];
   const dayRowEls=[...tpl.querySelectorAll('[data-row]')];
-  const tplRect=tpl.getBoundingClientRect();
   const safeCuts=[];
-  const forbiddenRanges=[];   /* [{start,end}] — must not cut inside these */
+  const forbiddenRanges=[];
 
   hdrEls.forEach(el=>{
-    const r=el.getBoundingClientRect();
-    const top=Math.round(r.top-tplRect.top);
-    const bot=Math.round(r.bottom-tplRect.top);
-    /* forbidden zone: inside this header */
-    if(top>0)forbiddenRanges.push({start:top,end:bot});
-    /* safe point: just before this header */
-    if(top>20)safeCuts.push(top-2);
+    const top=getTopRelToTpl(el);
+    const bot=top+el.offsetHeight;
+    forbiddenRanges.push({start:top,end:bot});
+    if(top>20)safeCuts.push(top);   /* cut point = exactly at header top */
   });
 
   dayRowEls.forEach(el=>{
-    const r=el.getBoundingClientRect();
-    const bot=Math.round(r.bottom-tplRect.top);
-    if(bot>0&&bot<tpl.scrollHeight-20)safeCuts.push(bot);
+    const top=getTopRelToTpl(el);
+    const bot=top+el.offsetHeight;
+    if(bot>0&&bot<tpl.scrollHeight-10)safeCuts.push(bot);
   });
 
   safeCuts.sort((a,b)=>a-b);
+  tpl.style.visibility='';
 
   document.getElementById('pdf-ld').classList.remove('hidden');
   try{
     const bg=dk?'#04091a':'#deeefb';
-    const canvas=await html2canvas(tpl,{scale:3,useCORS:true,allowTaint:true,backgroundColor:bg,logging:false,width:900,height:tpl.scrollHeight,windowWidth:900});
+    const canvas=await html2canvas(tpl,{scale:4,useCORS:true,allowTaint:true,backgroundColor:bg,logging:false,width:900,height:tpl.scrollHeight,windowWidth:900});
     tpl.style.cssText='position:fixed;left:-9999px;top:0;display:none;';tpl.innerHTML='';
     const iW=canvas.width,iH=canvas.height;
-    const scale=3; /* html2canvas scale */
+    const scale=4; /* html2canvas scale */
 
     if(fmt==='jpg'){
-      const a=document.createElement('a');a.href=canvas.toDataURL('image/jpeg',.95);a.download='study-schedule-detailed.jpg';a.click();
+      const a=document.createElement('a');a.href=canvas.toDataURL('image/jpeg',.98);a.download='study-schedule-detailed.jpg';a.click();
       showToast('✅ تم تحميل الصورة بنجاح!');
     } else {
       const pW=297,pH=210,m=10,topPad=8,maxW=pW-m*2,maxH=pH-m-topPad;
@@ -984,7 +984,7 @@ async function buildDetail(fmt){
         sl.getContext('2d').drawImage(canvas,0,srcY,iW,srcH,0,0,iW,srcH);
         const slMmH=srcH*mmPerPx;
         const yOff=firstPage&&slMmH<maxH?(pH-slMmH)/2:topPad;
-        doc.addImage(sl.toDataURL('image/jpeg',.97),'JPEG',m,yOff,maxW,slMmH);
+        doc.addImage(sl.toDataURL('image/png'),'PNG',m,yOff,maxW,slMmH);
         srcY=cutY;firstPage=false;
       }
       doc.save('study-schedule-detailed.pdf');
@@ -1002,7 +1002,7 @@ async function renderExport(tpl,dk,fmt,baseName){
   await document.fonts.ready;await new Promise(r=>setTimeout(r,280));
   try{
     const bg=dk?'#04091a':'#deeefb';
-    const canvas=await html2canvas(tpl,{scale:3,useCORS:true,allowTaint:true,backgroundColor:bg,logging:false,width:900,height:tpl.scrollHeight,windowWidth:900});
+    const canvas=await html2canvas(tpl,{scale:4,useCORS:true,allowTaint:true,backgroundColor:bg,logging:false,width:900,height:tpl.scrollHeight,windowWidth:900});
     const iW=canvas.width,iH=canvas.height;
     if(fmt==='jpg'){
       const a=document.createElement('a');a.href=canvas.toDataURL('image/jpeg',.95);a.download=baseName+'.jpg';a.click();
@@ -1016,7 +1016,7 @@ async function renderExport(tpl,dk,fmt,baseName){
       const bgArr=dk?[4,9,26]:[222,238,251];
       if(totalMmH<=maxH){
         doc.setFillColor(...bgArr);doc.rect(0,0,pW,pH,'F');
-        doc.addImage(canvas.toDataURL('image/jpeg',.97),'JPEG',m,(pH-totalMmH)/2,maxW,totalMmH);
+        doc.addImage(canvas.toDataURL('image/png'),'PNG',m,(pH-totalMmH)/2,maxW,totalMmH);
       } else {
         const sliceHpx=Math.floor(maxH/mmPerPx);
         const pages=Math.ceil(iH/sliceHpx);
@@ -1037,6 +1037,15 @@ async function renderExport(tpl,dk,fmt,baseName){
 loadData();
 refresh();
 renderList();
+
+/* ── Fix: white screen when returning to tab (Chrome mobile) ── */
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'){
+    /* force a repaint so Chrome re-renders the GPU layers */
+    document.body.style.transform='translateZ(0)';
+    requestAnimationFrame(()=>{document.body.style.transform='';});
+  }
+});
 </script>
 </body>
 </html>
