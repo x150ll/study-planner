@@ -903,22 +903,25 @@ async function buildDetail(fmt){
   await new Promise(r=>setTimeout(r,160));
 
   /* Collect safe cut points:
-     - BEFORE each subject header  → cut = top of header (not bottom)
-     - AFTER each day row          → cut = bottom of day row
-     This ensures a subject header is never orphaned at the bottom of a page */
+     Rule 1: safe AFTER every day-row (bottom edge)
+     Rule 2: safe BEFORE every subject header (top edge - small margin)
+     Rule 3: NEVER cut inside a header's vertical range → tracked as forbidden zones */
   const hdrEls=[...tpl.querySelectorAll('[data-hdr]')];
   const dayRowEls=[...tpl.querySelectorAll('[data-row]')];
   const tplRect=tpl.getBoundingClientRect();
   const safeCuts=[];
+  const forbiddenRanges=[];   /* [{start,end}] — must not cut inside these */
 
-  /* safe to cut BEFORE a subject header (use its top edge) */
   hdrEls.forEach(el=>{
     const r=el.getBoundingClientRect();
     const top=Math.round(r.top-tplRect.top);
-    if(top>20)safeCuts.push(top);   /* skip very top of page */
+    const bot=Math.round(r.bottom-tplRect.top);
+    /* forbidden zone: inside this header */
+    if(top>0)forbiddenRanges.push({start:top,end:bot});
+    /* safe point: just before this header */
+    if(top>20)safeCuts.push(top-2);
   });
 
-  /* safe to cut AFTER a day row (use its bottom edge) */
   dayRowEls.forEach(el=>{
     const r=el.getBoundingClientRect();
     const bot=Math.round(r.bottom-tplRect.top);
@@ -946,18 +949,29 @@ async function buildDetail(fmt){
       const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
       const bgArr=dk?[4,9,26]:[222,238,251];
 
-      /* Scale safe cuts from CSS pixels → canvas pixels */
+      /* Scale safe cuts and forbidden zones from CSS px → canvas px */
       const scaledCuts=safeCuts.map(y=>Math.round(y*scale));
+      const scaledForbidden=forbiddenRanges.map(z=>({s:Math.round(z.start*scale),e:Math.round(z.end*scale)}));
+
+      function inForbidden(y){return scaledForbidden.some(z=>y>z.s&&y<z.e);}
 
       function bestCut(startPx){
         const ideal=startPx+pageHpx;
         if(ideal>=iH)return iH;
-        /* last safe cut that is ≤ ideal and > startPx */
-        let best=ideal;
+        /* walk backward from ideal: find last safe cut that is NOT inside a header */
+        let best=null;
         for(let i=scaledCuts.length-1;i>=0;i--){
-          if(scaledCuts[i]>startPx&&scaledCuts[i]<=ideal){best=scaledCuts[i];break;}
+          const y=scaledCuts[i];
+          if(y<=startPx)break;
+          if(y<=ideal&&!inForbidden(y)){best=y;break;}
         }
-        return best;
+        if(best!==null)return best;
+        /* fallback: use ideal but retreat to start of any forbidden zone it lands in */
+        let fb=ideal;
+        for(const z of scaledForbidden){
+          if(fb>z.s&&fb<z.e){fb=z.s;break;}
+        }
+        return Math.max(startPx+1,fb);
       }
 
       let srcY=0;let firstPage=true;
