@@ -861,14 +861,93 @@ async function buildDetail(fmt){
   const dayFz=totalDC>80?'.6rem':totalDC>50?'.64rem':'.7rem';
   const dayPd=totalDC>80?'3px 5px':totalDC>50?'3px 6px':'4px 7px';
   let cum=0;
-  const colsH=subjects.map((s,si)=>{const nm=s.name||`مادة ${si+1}`;let sdr='';if(bd&&s.days>0){const st=new Date(bd);st.setDate(st.getDate()+cum);const en=new Date(bd);en.setDate(en.getDate()+cum+s.days-1);sdr=`<span class="pd-sub-dates">${fmtDate(st)} — ${fmtDate(en)}</span>`;}const drows=Array.from({length:s.days},(_,i)=>{let dt='';if(bd){const d=new Date(bd);d.setDate(d.getDate()+cum+i);dt=fmtDate(d);}const lbl=(s.dayLabels&&s.dayLabels[i])||'';const txt=lbl||`اليوم ${i+1}`;return `<div class="pd-day-row ${i%2===0?'pd-row-odd':'pd-row-even'}" style="padding:${dayPd};"><div class="pd-day-chk" style="border-color:${s.color.hex};width:10px;height:10px"></div><span class="pd-day-nm" style="font-size:${dayFz};min-width:38px">${txt}</span>${dt?`<span class="pd-day-dt" style="font-size:${dayFz}">${dt}</span>`:''}</div>`;}).join('');cum+=s.days;return `<div class="pd-subj"><div class="pd-sub-hdr"><div class="pd-sub-dot" style="background:${s.color.hex};box-shadow:0 0 4px ${s.color.hex}66"></div><span class="pd-sub-nm">${esc(nm)}</span>${sdr}<span class="pd-sub-meta">${s.days} أيام</span></div><div class="pd-days-wrap">${drows}</div></div>`;}).join('');
+  const colsH=subjects.map((s,si)=>{
+    const nm=s.name||`مادة ${si+1}`;let sdr='';
+    if(bd&&s.days>0){const st=new Date(bd);st.setDate(st.getDate()+cum);const en=new Date(bd);en.setDate(en.getDate()+cum+s.days-1);sdr=`<span class="pd-sub-dates">${fmtDate(st)} — ${fmtDate(en)}</span>`;}
+    const drows=Array.from({length:s.days},(_,i)=>{
+      let dt='';if(bd){const d=new Date(bd);d.setDate(d.getDate()+cum+i);dt=fmtDate(d);}
+      const lbl=(s.dayLabels&&s.dayLabels[i])||'';const txt=lbl||`اليوم ${i+1}`;
+      return `<div class="pd-day-row ${i%2===0?'pd-row-odd':'pd-row-even'}" style="padding:${dayPd};" data-row="1"><div class="pd-day-chk" style="border-color:${s.color.hex};width:10px;height:10px"></div><span class="pd-day-nm" style="font-size:${dayFz};min-width:38px">${txt}</span>${dt?`<span class="pd-day-dt" style="font-size:${dayFz}">${dt}</span>`:''}</div>`;
+    }).join('');
+    cum+=s.days;
+    return `<div class="pd-subj"><div class="pd-sub-hdr" data-hdr="1"><div class="pd-sub-dot" style="background:${s.color.hex};box-shadow:0 0 4px ${s.color.hex}66"></div><span class="pd-sub-nm">${esc(nm)}</span>${sdr}<span class="pd-sub-meta">${s.days} أيام</span></div><div class="pd-days-wrap">${drows}</div></div>`;
+  }).join('');
   const titleStr=dateFrom&&dateTo?`${dateFrom} — ${dateTo}`:`إجمالي الأيام: ${totalDays}`;
   tpl.className=cls;
   tpl.innerHTML=`<div class="pd-top-hdr"><div class="pd-top-hdr-grd"></div><div class="pd-top-hdr-in"><div class="pd-top-title">الجدول الدراسي</div><div class="pd-top-right"><div class="pd-top-count">${subjects.length} مواد دراسية</div><div class="pd-top-sub">${titleStr}</div></div></div><div class="pd-top-hdr-line"></div></div><div class="pd-cols" style="grid-template-columns:repeat(${numCols},1fr)">${colsH}</div><div class="pd-note"><span>○</span><span class="pd-note-txt">المربع الفارغ أمام كل يوم — ضع علامة ✓ أو لوّنه بعد إتمام مراجعة ذلك اليوم عند الطباعة</span></div><div class="pd-foot"><span class="pd-foot-l">© جميع الحقوق محفوظة · x150ll · ${today}</span><span class="pd-foot-r">https://studysmarter.pages.dev</span></div>`;
-  await renderExport(tpl,dk,fmt,'study-schedule-detailed');
+
+  /* Show tpl off-screen to measure row positions accurately */
+  tpl.style.cssText='position:fixed;left:-9999px;top:0;display:block;width:900px;';
+  await document.fonts.ready;
+  await new Promise(r=>setTimeout(r,160));
+
+  /* Collect safe cut points = bottom of each day-row and subject-header */
+  const rowEls=[...tpl.querySelectorAll('[data-row],[data-hdr]')];
+  const tplRect=tpl.getBoundingClientRect();
+  const safeCuts=[];
+  rowEls.forEach(el=>{
+    const r=el.getBoundingClientRect();
+    const bot=Math.round(r.bottom-tplRect.top);
+    if(bot>0&&bot<tpl.scrollHeight)safeCuts.push(bot);
+  });
+  safeCuts.sort((a,b)=>a-b);
+
+  document.getElementById('pdf-ld').classList.remove('hidden');
+  try{
+    const bg=dk?'#04091a':'#deeefb';
+    const canvas=await html2canvas(tpl,{scale:3,useCORS:true,allowTaint:true,backgroundColor:bg,logging:false,width:900,height:tpl.scrollHeight,windowWidth:900});
+    tpl.style.cssText='position:fixed;left:-9999px;top:0;display:none;';tpl.innerHTML='';
+    const iW=canvas.width,iH=canvas.height;
+    const scale=3; /* html2canvas scale */
+
+    if(fmt==='jpg'){
+      const a=document.createElement('a');a.href=canvas.toDataURL('image/jpeg',.95);a.download='study-schedule-detailed.jpg';a.click();
+      showToast('✅ تم تحميل الصورة بنجاح!');
+    } else {
+      const pW=297,pH=210,m=10,topPad=8,maxW=pW-m*2,maxH=pH-m-topPad;
+      const mmPerPx=maxW/iW;
+      const pageHpx=Math.floor(maxH/mmPerPx);
+      const{jsPDF}=window.jspdf;
+      const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+      const bgArr=dk?[4,9,26]:[222,238,251];
+
+      /* Scale safe cuts from CSS pixels → canvas pixels */
+      const scaledCuts=safeCuts.map(y=>Math.round(y*scale));
+
+      function bestCut(startPx){
+        const ideal=startPx+pageHpx;
+        if(ideal>=iH)return iH;
+        /* last safe cut that is ≤ ideal and > startPx */
+        let best=ideal;
+        for(let i=scaledCuts.length-1;i>=0;i--){
+          if(scaledCuts[i]>startPx&&scaledCuts[i]<=ideal){best=scaledCuts[i];break;}
+        }
+        return best;
+      }
+
+      let srcY=0;let firstPage=true;
+      while(srcY<iH){
+        const cutY=bestCut(srcY);
+        const srcH=cutY-srcY;if(srcH<=0)break;
+        if(!firstPage)doc.addPage();
+        doc.setFillColor(...bgArr);doc.rect(0,0,pW,pH,'F');
+        const sl=document.createElement('canvas');sl.width=iW;sl.height=srcH;
+        sl.getContext('2d').drawImage(canvas,0,srcY,iW,srcH,0,0,iW,srcH);
+        const slMmH=srcH*mmPerPx;
+        const yOff=firstPage&&slMmH<maxH?(pH-slMmH)/2:topPad;
+        doc.addImage(sl.toDataURL('image/jpeg',.97),'JPEG',m,yOff,maxW,slMmH);
+        srcY=cutY;firstPage=false;
+      }
+      doc.save('study-schedule-detailed.pdf');
+      showToast('✅ تم تحميل الجدول بنجاح!');
+    }
+  }catch(e){showToast('❌ حدث خطأ أثناء التحميل');console.error(e);}
+  const t=document.getElementById('pdf-det');
+  t.style.cssText='position:fixed;left:-9999px;top:0;display:none;';t.innerHTML='';
+  document.getElementById('pdf-ld').classList.add('hidden');
 }
 
-/* ── Core renderer: fixed multipage pixel-accurate splitting ── */
+/* ── renderExport: used only for Simple view ── */
 async function renderExport(tpl,dk,fmt,baseName){
   tpl.style.display='block';document.getElementById('pdf-ld').classList.remove('hidden');
   await document.fonts.ready;await new Promise(r=>setTimeout(r,280));
