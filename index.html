@@ -357,7 +357,8 @@ body.light .sub-row:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
 .pd-top-right{text-align:left;flex-shrink:0;}
 .pd-top-count{font-size:.8rem;font-weight:800;color:#64b5f6;white-space:nowrap;}
 .pd-top-sub{font-size:.63rem;color:#7090b8;margin-top:2px;white-space:nowrap;}
-.pd-cols{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:13px;}
+.pd-cols{display:flex;flex-direction:row;gap:11px;margin-bottom:13px;align-items:flex-start;}
+.pd-col{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0;}
 .pd-subj{break-inside:avoid;}
 .pd-sub-hdr{display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:8px;margin-bottom:3px;}
 .dk .pd-sub-hdr{background:#0d1829;}.lt .pd-sub-hdr{background:#c8e0f8;}
@@ -861,7 +862,7 @@ async function buildDetail(fmt){
   const dayFz=totalDC>80?'.6rem':totalDC>50?'.64rem':'.7rem';
   const dayPd=totalDC>80?'3px 5px':totalDC>50?'3px 6px':'4px 7px';
   let cum=0;
-  const colsH=subjects.map((s,si)=>{
+  const subjHTMLs=subjects.map((s,si)=>{
     const nm=s.name||`مادة ${si+1}`;let sdr='';
     if(bd&&s.days>0){const st=new Date(bd);st.setDate(st.getDate()+cum);const en=new Date(bd);en.setDate(en.getDate()+cum+s.days-1);sdr=`<span class="pd-sub-dates">${fmtDate(st)} — ${fmtDate(en)}</span>`;}
     const drows=Array.from({length:s.days},(_,i)=>{
@@ -871,10 +872,30 @@ async function buildDetail(fmt){
     }).join('');
     cum+=s.days;
     return `<div class="pd-subj"><div class="pd-sub-hdr" data-hdr="1"><div class="pd-sub-dot" style="background:${s.color.hex};box-shadow:0 0 4px ${s.color.hex}66"></div><span class="pd-sub-nm">${esc(nm)}</span>${sdr}<span class="pd-sub-meta">${s.days} أيام</span></div><div class="pd-days-wrap">${drows}</div></div>`;
-  }).join('');
+  });
+
+  /* Distribute subjects into columns by day count to balance heights */
+  let colsHTML='';
+  if(numCols===1){
+    colsHTML=`<div class="pd-col">${subjHTMLs.join('')}</div>`;
+  } else {
+    /* Fill columns greedily: assign each subject to the shortest column */
+    const cols=Array.from({length:numCols},()=>({html:'',h:0}));
+    subjHTMLs.forEach((html,si)=>{
+      const s=subjects[si];
+      /* estimate height: header 36px + each day 28px */
+      const h=36+s.days*28+8;
+      /* find shortest column */
+      let shortest=0;
+      for(let c=1;c<numCols;c++){if(cols[c].h<cols[shortest].h)shortest=c;}
+      cols[shortest].html+=html;
+      cols[shortest].h+=h;
+    });
+    colsHTML=cols.map(c=>`<div class="pd-col">${c.html}</div>`).join('');
+  }
   const titleStr=dateFrom&&dateTo?`${dateFrom} — ${dateTo}`:`إجمالي الأيام: ${totalDays}`;
   tpl.className=cls;
-  tpl.innerHTML=`<div class="pd-top-hdr"><div class="pd-top-hdr-grd"></div><div class="pd-top-hdr-in"><div class="pd-top-title">الجدول الدراسي</div><div class="pd-top-right"><div class="pd-top-count">${subjects.length} مواد دراسية</div><div class="pd-top-sub">${titleStr}</div></div></div><div class="pd-top-hdr-line"></div></div><div class="pd-cols" style="grid-template-columns:repeat(${numCols},1fr)">${colsH}</div><div class="pd-note"><span>○</span><span class="pd-note-txt">المربع الفارغ أمام كل يوم — ضع علامة ✓ أو لوّنه بعد إتمام مراجعة ذلك اليوم عند الطباعة</span></div><div class="pd-foot"><span class="pd-foot-l">© جميع الحقوق محفوظة · x150ll · ${today}</span><span class="pd-foot-r">https://studysmarter.pages.dev</span></div>`;
+  tpl.innerHTML=`<div class="pd-top-hdr"><div class="pd-top-hdr-grd"></div><div class="pd-top-hdr-in"><div class="pd-top-title">الجدول الدراسي</div><div class="pd-top-right"><div class="pd-top-count">${subjects.length} مواد دراسية</div><div class="pd-top-sub">${titleStr}</div></div></div><div class="pd-top-hdr-line"></div></div><div class="pd-cols">${colsHTML}</div><div class="pd-note"><span>○</span><span class="pd-note-txt">المربع الفارغ أمام كل يوم — ضع علامة ✓ أو لوّنه بعد إتمام مراجعة ذلك اليوم عند الطباعة</span></div><div class="pd-foot"><span class="pd-foot-l">© جميع الحقوق محفوظة · x150ll · ${today}</span><span class="pd-foot-r">https://studysmarter.pages.dev</span></div>`;
 
   /* Show tpl off-screen to measure row positions accurately */
   tpl.style.cssText='position:fixed;left:-9999px;top:0;display:block;width:900px;';
