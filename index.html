@@ -902,15 +902,29 @@ async function buildDetail(fmt){
   await document.fonts.ready;
   await new Promise(r=>setTimeout(r,160));
 
-  /* Collect safe cut points = bottom of each day-row and subject-header */
-  const rowEls=[...tpl.querySelectorAll('[data-row],[data-hdr]')];
+  /* Collect safe cut points:
+     - BEFORE each subject header  → cut = top of header (not bottom)
+     - AFTER each day row          → cut = bottom of day row
+     This ensures a subject header is never orphaned at the bottom of a page */
+  const hdrEls=[...tpl.querySelectorAll('[data-hdr]')];
+  const dayRowEls=[...tpl.querySelectorAll('[data-row]')];
   const tplRect=tpl.getBoundingClientRect();
   const safeCuts=[];
-  rowEls.forEach(el=>{
+
+  /* safe to cut BEFORE a subject header (use its top edge) */
+  hdrEls.forEach(el=>{
+    const r=el.getBoundingClientRect();
+    const top=Math.round(r.top-tplRect.top);
+    if(top>20)safeCuts.push(top);   /* skip very top of page */
+  });
+
+  /* safe to cut AFTER a day row (use its bottom edge) */
+  dayRowEls.forEach(el=>{
     const r=el.getBoundingClientRect();
     const bot=Math.round(r.bottom-tplRect.top);
-    if(bot>0&&bot<tpl.scrollHeight)safeCuts.push(bot);
+    if(bot>0&&bot<tpl.scrollHeight-20)safeCuts.push(bot);
   });
+
   safeCuts.sort((a,b)=>a-b);
 
   document.getElementById('pdf-ld').classList.remove('hidden');
