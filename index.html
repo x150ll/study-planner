@@ -11,13 +11,14 @@
 <link rel="apple-touch-icon" href="logo.png">
 <title>Study Smarter · ادرس بذكاء</title>
 
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0R60D6SZ6J"></script>
+<!-- ══ Google Analytics ══ -->
+<!-- استبدل G-XXXXXXXXXX بمعرف القياس الخاص بك من Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-0R60D6SZ6J');
+  gtag('config', 'G-XXXXXXXXXX');
 </script>
 <!-- ════════════════════════ -->
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -102,11 +103,48 @@ body.light .mode-btn.on{box-shadow:0 2px 10px rgba(0,0,0,.07)}
 .btn-add{background:linear-gradient(135deg,var(--b2),var(--b0));color:#fff;box-shadow:0 4px 18px rgba(33,150,243,.28);}
 .btn-add:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(33,150,243,.42)}
 .btn-add:active{transform:scale(.97)}
-.btn-dist{background:var(--s2);border:1.5px solid var(--b3);color:var(--b4);font-weight:700;}
-.btn-dist:hover{background:rgba(33,150,243,.1);border-color:var(--b4);color:var(--b5)}
+.btn-reset{background:var(--s2);border:1.5px solid var(--danger);color:var(--danger);font-weight:700;}
+.btn-reset:hover{background:rgba(244,63,94,.08);border-color:#ff6b6b;color:#ff6b6b;}
 .btn-export{background:linear-gradient(135deg,var(--b1),var(--b3));color:#fff;box-shadow:0 4px 18px rgba(21,101,192,.25);}
 .btn-export:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(21,101,192,.4)}
 .btn-export:active{transform:scale(.97)}
+.help-pill{height:26px;padding:0 10px;border-radius:100px;background:var(--s2);border:1.5px solid var(--ln);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.65rem;font-weight:800;color:var(--sub);transition:all .2s;white-space:nowrap;}
+.help-pill:hover{border-color:var(--acc);color:var(--acc);}
+
+/* ── Format Choice Modal ── */
+.fmt-ov{position:fixed;inset:0;z-index:11000;background:rgba(0,0,0,.65);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;}
+.fmt-ov.open{opacity:1;pointer-events:all;}
+.fmt-box{background:var(--s1);border:1.5px solid var(--ln);border-radius:20px;width:100%;max-width:360px;overflow:hidden;transform:scale(.94) translateY(14px);transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:0 28px 80px rgba(0,0,0,.55);}
+.fmt-ov.open .fmt-box{transform:scale(1) translateY(0);}
+.fmt-hdr{padding:16px 18px 12px;border-bottom:1px solid var(--ln);}
+.fmt-hdr h3{font-size:.95rem;font-weight:900;}
+.fmt-hdr p{font-size:.72rem;color:var(--sub);margin-top:2px;}
+.fmt-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;}
+.fmt-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--ln);background:var(--s2);cursor:pointer;transition:all .2s;text-align:right;}
+.fmt-card:hover{transform:translateY(-2px);}
+.fmt-card.fc-pdf:hover{border-color:var(--b3);box-shadow:0 4px 18px rgba(33,150,243,.2);}
+.fmt-card.fc-jpg:hover{border-color:var(--warn);box-shadow:0 4px 18px rgba(245,158,11,.15);}
+.fmt-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.fc-pdf .fmt-ico{background:linear-gradient(135deg,var(--b1),var(--b3));}
+.fc-jpg .fmt-ico{background:linear-gradient(135deg,#f59e0b,#f97316);}
+.fmt-info strong{display:block;font-size:.86rem;font-weight:800;color:var(--tx);}
+.fmt-info span{display:block;font-size:.68rem;color:var(--sub);margin-top:2px;line-height:1.4;}
+.fmt-cancel{width:100%;padding:8px;border:1.5px solid var(--ln);border-radius:9px;background:none;color:var(--sub);font-family:'Tajawal',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:2px;}
+.fmt-cancel:hover{border-color:var(--danger);color:var(--danger);}
+
+/* ── Confirm Reset Modal ── */
+.cfm-ov{position:fixed;inset:0;z-index:11500;background:rgba(0,0,0,.65);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;}
+.cfm-ov.open{opacity:1;pointer-events:all;}
+.cfm-box{background:var(--s1);border:1.5px solid rgba(244,63,94,.4);border-radius:18px;width:100%;max-width:320px;padding:22px 20px;transform:scale(.94) translateY(12px);transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:0 24px 70px rgba(0,0,0,.55);text-align:center;}
+.cfm-ov.open .cfm-box{transform:scale(1) translateY(0);}
+.cfm-ico{font-size:2rem;margin-bottom:10px;}
+.cfm-box h3{font-size:.95rem;font-weight:900;margin-bottom:6px;}
+.cfm-box p{font-size:.78rem;color:var(--sub);line-height:1.6;margin-bottom:16px;}
+.cfm-btns{display:flex;gap:8px;}
+.cfm-yes{flex:1;padding:9px;border-radius:10px;border:none;background:linear-gradient(135deg,#f43f5e,#e11d48);color:#fff;font-family:'Tajawal',sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;transition:all .2s;}
+.cfm-yes:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(244,63,94,.4);}
+.cfm-no{flex:1;padding:9px;border-radius:10px;border:1.5px solid var(--ln);background:none;color:var(--sub);font-family:'Tajawal',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.cfm-no:hover{border-color:var(--sub);color:var(--tx);}
 .warn-bar{background:rgba(244,63,94,.08);border:1.5px solid rgba(244,63,94,.3);border-radius:9px;padding:7px 11px;font-size:.74rem;color:var(--danger);margin-top:7px;display:none;}
 .warn-bar.on{display:block}
 .sb-footer{padding:11px 18px;border-top:1px solid var(--ln);margin-top:auto;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;}
@@ -384,7 +422,7 @@ body.light .sub-row:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
         </div>
       </div>
       <div class="sb-ctrl">
-        <button class="icon-btn" onclick="openHelp()" title="شرح وتعليمات">؟</button>
+        <button class="help-pill" onclick="openHelp()" title="تعليمات الاستخدام">تعليمات ؟</button>
         <button class="theme-pill" id="theme-pill" onclick="toggleTheme()">
           <div class="knob" id="knob">🌙</div>
         </button>
@@ -420,7 +458,7 @@ body.light .sub-row:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
   <div class="sb-actions">
     <div class="sec-lbl">الإجراءات</div>
     <button class="btn btn-add" onclick="addSubject()">＋ إضافة مادة</button>
-    <button class="btn btn-dist" onclick="autoDistribute()">⚖ توزيع متساوٍ تلقائي</button>
+    <button class="btn btn-reset" onclick="confirmReset()">↺ إعادة تعيين الجدول</button>
     <button class="btn btn-export" onclick="doExport()">📄 تحميل الجدول</button>
   </div>
   <div class="sb-footer">
@@ -480,70 +518,128 @@ body.light .sub-row:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
   </div>
 </div>
 
+<!-- FORMAT CHOICE MODAL -->
+<div class="fmt-ov" id="fmt-ov" onclick="if(event.target===this)closeFmt()">
+  <div class="fmt-box">
+    <div class="fmt-hdr">
+      <h3>اختر صيغة التحميل</h3>
+      <p>حدد الطريقة التي تناسبك</p>
+    </div>
+    <div class="fmt-body">
+      <div class="fmt-card fc-pdf" onclick="closeFmt();exportAs('pdf')">
+        <div class="fmt-ico">📄</div>
+        <div class="fmt-info">
+          <strong>تحميل كـ PDF</strong>
+          <span>الأفضل إذا أردت طباعة الجدول أو حفظه بجودة عالية</span>
+        </div>
+      </div>
+      <div class="fmt-card fc-jpg" onclick="closeFmt();exportAs('jpg')">
+        <div class="fmt-ico">🖼</div>
+        <div class="fmt-info">
+          <strong>تحميل كـ صورة JPG</strong>
+          <span>الأفضل إذا أردت حفظه كصورة أو مشاركته بدون طباعة</span>
+        </div>
+      </div>
+      <button class="fmt-cancel" onclick="closeFmt()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM RESET MODAL -->
+<div class="cfm-ov" id="cfm-ov" onclick="if(event.target===this)closeCfm()">
+  <div class="cfm-box">
+    <div class="cfm-ico">↺</div>
+    <h3>إعادة تعيين الجدول</h3>
+    <p>سيتم مسح جميع المواد والأيام والبيانات المحفوظة.<br>هل أنت متأكد؟</p>
+    <div class="cfm-btns">
+      <button class="cfm-yes" onclick="doReset()">نعم، أعد التعيين</button>
+      <button class="cfm-no" onclick="closeCfm()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
 <!-- HELP MODAL -->
 <div class="help-ov" id="help-ov" onclick="if(event.target===this)closeHelp()">
   <div class="help-box">
     <div class="help-hdr">
-      <h3>📖 دليل الاستخدام</h3>
+      <h3>تعليمات الاستخدام</h3>
       <button class="help-close" onclick="closeHelp()">✕</button>
     </div>
     <div class="help-body">
+
       <div class="help-section">
-        <h4>🚀 ما هو Study Smarter؟</h4>
-        <p>تطبيق يساعدك على تحديد عدد أيام المراجعة المتاحة، ثم توزيعها بذكاء على مواد دراسية متعددة. بعد التوزيع يمكنك تحميل جدولك كملف PDF جاهز للطباعة.</p>
+        <h4>① كيف تبدأ؟</h4>
+        <p>أولاً حدد عدد الأيام المتاحة للمراجعة، إما برقم مباشر أو بتحديد نطاق تاريخ (من / إلى). ثم اضغط <span class="help-chip chip-b">＋ إضافة مادة</span> لكل مادة دراسية، واضبط عدد أيامها يدوياً.</p>
       </div>
+
       <div class="help-section">
-        <h4>⚡ كيف تبدأ؟</h4>
-        <p>
-          1. حدد عدد الأيام المتاحة (رقم مباشر أو نطاق تاريخ).<br>
-          2. اضغط <span class="help-chip chip-b">＋ إضافة مادة</span> لكل مادة دراسية.<br>
-          3. اضبط عدد الأيام لكل مادة يدوياً أو اضغط <span class="help-chip chip-b">⚖ توزيع متساوٍ</span>.<br>
-          4. اسحب المادة من النقاط الجانبية لتغيير الترتيب.<br>
-          5. اضغط <span class="help-chip chip-b">📄 تحميل الجدول</span> للحصول على ملف PDF.
-        </p>
+        <h4>② مثال حقيقي — 34 يوم / 4 مواد</h4>
+        <table class="help-table">
+          <tr><th>المادة</th><th>الأيام</th><th>من</th><th>إلى</th></tr>
+          <tr><td>الفيزياء</td><td>10</td><td>4/19</td><td>4/28</td></tr>
+          <tr><td>الكيمياء</td><td>9</td><td>4/29</td><td>5/7</td></tr>
+          <tr><td>الرياضيات</td><td>8</td><td>5/8</td><td>5/15</td></tr>
+          <tr><td>الأحياء</td><td>7</td><td>5/16</td><td>5/22</td></tr>
+        </table>
+        <p style="margin-top:8px;font-size:.76rem;">يمكنك سحب أي مادة من النقاط ⠿ على يمينها لتغيير ترتيبها.</p>
       </div>
+
       <div class="help-section">
-        <h4>📋 الفرق بين الجدول البسيط والمفصل</h4>
+        <h4>③ الفرق بين الجدول البسيط والمفصل</h4>
         <div class="help-diff">
           <div class="diff-card">
-            <h5>📋 الجدول البسيط</h5>
-            <ul>
-              <li>عرض كل مادة مع عدد أيامها</li>
-              <li>تواريخ البداية والنهاية</li>
-              <li>دائرة للتحقق عند الطباعة</li>
-              <li>مناسب للنظرة السريعة</li>
-            </ul>
+            <h5>📋 البسيط</h5>
+            <p style="font-size:.74rem;color:var(--sub);line-height:1.7;margin-top:4px;">
+              يعرض كل مادة في سطر واحد مع عدد أيامها وتاريخ البداية والنهاية.<br>
+              <strong>استخدمه:</strong> لنظرة سريعة شاملة على الجدول كاملاً.
+            </p>
           </div>
           <div class="diff-card">
-            <h5>📝 الجدول المفصل</h5>
-            <ul>
-              <li>كل مادة مقسمة بأيامها</li>
-              <li>تستطيع تسمية كل يوم</li>
-              <li>مربع تحقق لكل يوم</li>
-              <li>تواريخ دقيقة لكل يوم</li>
-            </ul>
+            <h5>📝 المفصل</h5>
+            <p style="font-size:.74rem;color:var(--sub);line-height:1.7;margin-top:4px;">
+              يعرض أيام كل مادة واحداً واحداً مع تاريخ كل يوم.<br>
+              <strong>استخدمه:</strong> عندما تريد تتبع يومك بدقة وتضع ✓ على كل يوم أنجزته.
+            </p>
           </div>
         </div>
       </div>
+
       <div class="help-section">
-        <h4>🗓 مثال عملي</h4>
+        <h4>④ كيف يبدو كل جدول عند التحميل؟</h4>
         <table class="help-table">
-          <tr><th>المادة</th><th>الأيام</th><th>من</th><th>إلى</th></tr>
-          <tr><td>الفيزياء</td><td>10 أيام</td><td>4/18</td><td>4/27</td></tr>
-          <tr><td>الكيمياء</td><td>9 أيام</td><td>4/28</td><td>5/6</td></tr>
-          <tr><td>الرياضيات</td><td>8 أيام</td><td>5/7</td><td>5/14</td></tr>
-          <tr><td>الأحياء</td><td>7 أيام</td><td>5/15</td><td>5/21</td></tr>
+          <tr><th>الجدول البسيط يبدو هكذا</th></tr>
+          <tr><td>
+            <div style="font-size:.75rem;line-height:2;color:var(--tx);">
+              ○ &nbsp;<strong>الفيزياء</strong> &nbsp;·&nbsp; 10 أيام &nbsp;·&nbsp; <span style="color:var(--sub)">4/19 — 4/28</span><br>
+              ○ &nbsp;<strong>الكيمياء</strong> &nbsp;·&nbsp; 9 أيام &nbsp;·&nbsp; <span style="color:var(--sub)">4/29 — 5/7</span>
+            </div>
+          </td></tr>
+        </table>
+        <table class="help-table" style="margin-top:8px;">
+          <tr><th>الجدول المفصل يبدو هكذا</th></tr>
+          <tr><td>
+            <div style="font-size:.75rem;line-height:2;color:var(--tx);">
+              <strong>● الفيزياء</strong> &nbsp;<span style="color:var(--sub)">4/19 — 4/28 · 10 أيام</span><br>
+              ☐ &nbsp;اليوم 1 &nbsp;&nbsp;<span style="color:var(--sub)">4/19</span><br>
+              ☐ &nbsp;اليوم 2 &nbsp;&nbsp;<span style="color:var(--sub)">4/20</span><br>
+              ☐ &nbsp;اليوم 3 &nbsp;&nbsp;<span style="color:var(--sub)">4/21</span>
+            </div>
+          </td></tr>
         </table>
       </div>
+
       <div class="help-section">
-        <h4>💡 نصائح مفيدة</h4>
-        <p>
-          • في الجدول المفصل اضغط على <strong>"تفاصيل الأيام"</strong> تحت كل مادة لتسمية كل يوم (مثلاً: الفصل الأول، الحل والتمارين...).<br>
-          • عند تقليل عدد أيام مادة، تُحذف التسميات الزائدة تلقائياً.<br>
-          • لو حددت نطاق تاريخ ستظهر التواريخ الدقيقة بجانب كل يوم في الجدول المفصل.<br>
-          • يمكنك تثبيت التطبيق على شاشتك الرئيسية للوصول السريع.
-        </p>
+        <h4>⑤ تفاصيل الأيام (في الجدول المفصل فقط)</h4>
+        <p>في الجدول المفصل اضغط <strong>"تفاصيل الأيام"</strong> تحت أي مادة لتكتب ما ستدرسه في كل يوم. مثلاً: اليوم 1 ← الفصل الأول، اليوم 2 ← الفصل الثاني والتمارين. إذا تركته فارغاً يظهر "اليوم 1، اليوم 2..." تلقائياً.</p>
       </div>
+
+      <div class="help-section">
+        <h4>⑥ تحميل الجدول</h4>
+        <p>اضغط <span class="help-chip chip-b">📄 تحميل الجدول</span> ثم اختر:<br>
+        • <strong>PDF</strong> — إذا أردت طباعة الجدول<br>
+        • <strong>صورة JPG</strong> — إذا أردت مشاركته أو حفظه كصورة</p>
+      </div>
+
     </div>
   </div>
 </div>
@@ -563,6 +659,34 @@ let curView='simple';
 let isDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;
 let deferredPrompt=null;
 
+/* ── localStorage save/load ── */
+function saveData(){
+  try{localStorage.setItem('ss_data',JSON.stringify({totalDays,subjects,uid,mode,dateFrom,dateTo,curView}));}catch(e){}
+}
+function loadData(){
+  try{
+    const raw=localStorage.getItem('ss_data');if(!raw)return;
+    const d=JSON.parse(raw);
+    totalDays=d.totalDays||0;subjects=d.subjects||[];uid=d.uid||1;
+    mode=d.mode||'num';dateFrom=d.dateFrom||'';dateTo=d.dateTo||'';curView=d.curView||'simple';
+    if(mode==='num'){
+      document.getElementById('seg-num').classList.add('on');document.getElementById('seg-rng').classList.remove('on');
+      document.getElementById('pnl-num').classList.add('on');document.getElementById('pnl-range').classList.remove('on');
+      if(totalDays>0)document.getElementById('inp-num').value=totalDays;
+    } else {
+      document.getElementById('seg-num').classList.remove('on');document.getElementById('seg-rng').classList.add('on');
+      document.getElementById('pnl-num').classList.remove('on');document.getElementById('pnl-range').classList.add('on');
+      if(dateFrom)document.getElementById('inp-from').value=dateFrom;
+      if(dateTo)document.getElementById('inp-to').value=dateTo;
+    }
+    if(totalDays>0){document.getElementById('days-card').style.display='block';document.getElementById('days-big').textContent=totalDays;}
+    if(curView==='detail'){
+      document.getElementById('vtab-simple').classList.remove('on');document.getElementById('vtab-detail').classList.add('on');
+      document.getElementById('view-lbl').textContent='المواد مع تفاصيل الأيام';
+    }
+  }catch(e){console.warn('load error',e);}
+}
+
 /* ── PWA ── */
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();deferredPrompt=e;
@@ -578,10 +702,8 @@ function dismissInstall(){localStorage.setItem('installDismissed','1');document.
 function dismissOnboarding(){
   localStorage.setItem('ob','1');
   const ov=document.getElementById('ob-overlay');
-  ov.classList.add('gone');
-  setTimeout(()=>ov.style.display='none',500);
-  openHelp();
-  beep(500,.08,.05);setTimeout(()=>beep(680,.1,.05),90);
+  ov.classList.add('gone');setTimeout(()=>ov.style.display='none',500);
+  openHelp();beep(500,.08,.05);setTimeout(()=>beep(680,.1,.05),90);
 }
 if(localStorage.getItem('ob')){document.getElementById('ob-overlay').style.display='none';}
 
@@ -600,19 +722,36 @@ function sndTick(){beep(420,.08,.04)}
 function sndExport(){beep(500,.07,.05);setTimeout(()=>beep(650,.07,.05),80);setTimeout(()=>beep(850,.12,.05),160)}
 
 /* ── UI helpers ── */
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
 function openSoc(){document.getElementById('soc-ov').classList.add('open');sndTick();}
 function closeSoc(){document.getElementById('soc-ov').classList.remove('open');}
 function openHelp(){document.getElementById('help-ov').classList.add('open');sndTick();}
 function closeHelp(){document.getElementById('help-ov').classList.remove('open');}
 function toggleTheme(){isDark=!isDark;applyTheme();sndTick();}
+function openFmt(){if(!subjects.length){showToast('⚠ أضف مواد أولاً');return;}document.getElementById('fmt-ov').classList.add('open');sndTick();}
+function closeFmt(){document.getElementById('fmt-ov').classList.remove('open');}
+function confirmReset(){document.getElementById('cfm-ov').classList.add('open');sndTick();}
+function closeCfm(){document.getElementById('cfm-ov').classList.remove('open');}
+function doReset(){
+  closeCfm();
+  totalDays=0;subjects=[];uid=1;mode='num';dateFrom='';dateTo='';curView='simple';
+  localStorage.removeItem('ss_data');
+  document.getElementById('inp-num').value='';
+  document.getElementById('inp-from').value='';document.getElementById('inp-to').value='';
+  document.getElementById('days-card').style.display='none';document.getElementById('days-big').textContent='0';
+  switchMode('num');
+  document.getElementById('vtab-simple').classList.add('on');document.getElementById('vtab-detail').classList.remove('on');
+  document.getElementById('view-lbl').textContent='المواد الدراسية';
+  curView='simple';refresh();renderList();
+  beep(300,.15,.05,'sawtooth');showToast('↺ تم إعادة تعيين الجدول');
+}
 
 function switchView(v){
   curView=v;
   document.getElementById('vtab-simple').classList.toggle('on',v==='simple');
   document.getElementById('vtab-detail').classList.toggle('on',v==='detail');
   document.getElementById('view-lbl').textContent=v==='simple'?'المواد الدراسية':'المواد مع تفاصيل الأيام';
-  sndTick();renderList();
+  sndTick();renderList();saveData();
 }
 function switchMode(m){
   mode=m;
@@ -622,8 +761,8 @@ function switchMode(m){
   document.getElementById('pnl-range').classList.toggle('on',m==='range');
   if(m==='num')onNumChange();else onDateChange();
 }
-function onNumChange(){const v=parseInt(document.getElementById('inp-num').value);setTotal(isNaN(v)||v<0?0:v);dateFrom='';dateTo='';}
-function onDateChange(){const f=document.getElementById('inp-from').value,t=document.getElementById('inp-to').value;if(f&&t){const diff=Math.round((new Date(t)-new Date(f))/86400000)+1;if(diff>0){dateFrom=f;dateTo=t;setTotal(diff);}}}
+function onNumChange(){const v=parseInt(document.getElementById('inp-num').value);setTotal(isNaN(v)||v<0?0:v);dateFrom='';dateTo='';saveData();}
+function onDateChange(){const f=document.getElementById('inp-from').value,t=document.getElementById('inp-to').value;if(f&&t){const diff=Math.round((new Date(t)-new Date(f))/86400000)+1;if(diff>0){dateFrom=f;dateTo=t;setTotal(diff);saveData();}}}
 function setTotal(n){totalDays=n;document.getElementById('days-card').style.display=n>0?'block':'none';document.getElementById('days-big').textContent=n;refresh();}
 function assigned(){return subjects.reduce((a,s)=>a+s.days,0);}
 function remaining(){return totalDays-assigned();}
@@ -634,197 +773,87 @@ function fmtDate(d){return d.toLocaleDateString('ar',{month:'numeric',day:'numer
 function addSubject(){
   if(!totalDays){showToast('⚠ حدد عدد الأيام أولاً');return;}
   const sub={id:uid++,name:'',days:subjects.length===0?totalDays:Math.max(0,remaining()),done:false,color:PALETTE[subjects.length%PALETTE.length],daysCompleted:0,dayLabels:{}};
-  subjects.push(sub);renderList();refresh();sndAdd();
+  subjects.push(sub);renderList();refresh();sndAdd();saveData();
   setTimeout(()=>{const el=document.querySelector(`[data-sname="${sub.id}"]`);if(el)el.focus();},40);
 }
-function deleteSubject(id){subjects=subjects.filter(s=>s.id!==id);renderList();refresh();sndDel();showToast('🗑 تم حذف المادة');}
-function toggleDone(id){const s=subjects.find(s=>s.id===id);if(!s)return;s.done=!s.done;s.done?sndDone():sndTick();refresh();renderList();}
-
+function deleteSubject(id){subjects=subjects.filter(s=>s.id!==id);renderList();refresh();sndDel();saveData();showToast('🗑 تم حذف المادة');}
+function toggleDone(id){const s=subjects.find(s=>s.id===id);if(!s)return;s.done=!s.done;s.done?sndDone():sndTick();refresh();renderList();saveData();}
 function setDays(id,val){
   const s=subjects.find(s=>s.id===id);if(!s)return;
-  const prev=s.days;
-  const n=parseInt(val);s.days=isNaN(n)||n<0?0:n;
+  const prev=s.days;const n=parseInt(val);s.days=isNaN(n)||n<0?0:n;
   if(s.daysCompleted>s.days)s.daysCompleted=s.days;
-  /* trim dayLabels for removed days */
   if(s.dayLabels&&n<prev){for(let i=n;i<prev;i++)delete s.dayLabels[i];}
-  refresh();
+  refresh();saveData();
   const pct=totalDays>0?Math.min(100,(s.days/totalDays)*100):0;
   const f=document.querySelector(`[data-bar="${id}"]`);if(f)f.style.width=pct+'%';
-  /* update expand toggle count without full re-render */
   const et=document.getElementById(`et-${id}`);
   if(et){const span=et.querySelector('span:last-child');if(span)span.textContent=`تفاصيل الأيام (${s.days})`;}
-  /* rebuild day inputs if expanded */
   const di=document.getElementById(`di-${id}`);
   if(di&&di.classList.contains('open')){rebuildDayInputs(s,di);}
 }
-
 function rebuildDayInputs(s,container){
-  const bd=getBaseDate();
-  const idx=subjects.indexOf(s);
-  let cumDay=0;subjects.slice(0,idx).forEach(x=>cumDay+=x.days);
+  const bd=getBaseDate();const idx=subjects.indexOf(s);let cumDay=0;subjects.slice(0,idx).forEach(x=>cumDay+=x.days);
   container.innerHTML=Array.from({length:s.days},(_,di)=>{
-    const d=new Date(bd);d.setDate(d.getDate()+cumDay+di);
-    const dateStr=fmtDate(d);
-    const lbl=(s.dayLabels&&s.dayLabels[di])||'';
-    return `<div class="day-inp-row">
-      <span class="day-inp-num">اليوم ${di+1}</span>
-      <input class="day-inp" placeholder="ما الذي ستدرسه؟" value="${esc(lbl)}"
-        oninput="setDayLabel(${s.id},${di},this.value)">
-      <span class="day-date-lbl">${dateStr}</span>
-    </div>`;
+    const d=new Date(bd);d.setDate(d.getDate()+cumDay+di);const dateStr=fmtDate(d);const lbl=(s.dayLabels&&s.dayLabels[di])||'';
+    return `<div class="day-inp-row"><span class="day-inp-num">اليوم ${di+1}</span><input class="day-inp" placeholder="ما الذي ستدرسه؟" value="${lbl.replace(/"/g,'&quot;')}" oninput="setDayLabel(${s.id},${di},this.value)"><span class="day-date-lbl">${dateStr}</span></div>`;
   }).join('');
 }
-
 function step(id,d){const s=subjects.find(s=>s.id===id);if(!s)return;s.days=Math.max(0,s.days+d);if(s.daysCompleted>s.days)s.daysCompleted=s.days;const inp=document.querySelector(`[data-sdays="${id}"]`);if(inp)inp.value=s.days;setDays(id,s.days);beep(d>0?460:300,.07,.04);}
-function setName(id,val){const s=subjects.find(s=>s.id===id);if(s)s.name=val;}
-function setDayLabel(id,dayIdx,val){const s=subjects.find(s=>s.id===id);if(s){if(!s.dayLabels)s.dayLabels={};s.dayLabels[dayIdx]=val;}}
-function autoDistribute(){if(!subjects.length||!totalDays)return;const base=Math.floor(totalDays/subjects.length),extra=totalDays-base*subjects.length;subjects.forEach((s,i)=>{const prev=s.days;s.days=base+(i<extra?1:0);s.daysCompleted=Math.min(s.daysCompleted||0,s.days);if(s.dayLabels&&s.days<prev)for(let j=s.days;j<prev;j++)delete s.dayLabels[j];});renderList();refresh();sndAdd();showToast('⚖ تم التوزيع');}
-
+function setName(id,val){const s=subjects.find(s=>s.id===id);if(s){s.name=val;saveData();}}
+function setDayLabel(id,dayIdx,val){const s=subjects.find(s=>s.id===id);if(s){if(!s.dayLabels)s.dayLabels={};s.dayLabels[dayIdx]=val;saveData();}}
 function refresh(){
   const rem=Math.max(0,remaining()),asgn=assigned(),pct=totalDays>0?Math.min(100,(asgn/totalDays)*100):0,done=subjects.filter(s=>s.done).length;
-  document.getElementById('days-rem').textContent=rem;
-  document.getElementById('abar-f').style.width=pct+'%';
-  document.getElementById('st-total').textContent=totalDays;
-  document.getElementById('st-subs').textContent=subjects.length;
-  document.getElementById('st-rem').textContent=rem;
-  document.getElementById('done-pill').textContent=`${done} / ${subjects.length} مكتمل`;
+  document.getElementById('days-rem').textContent=rem;document.getElementById('abar-f').style.width=pct+'%';
+  document.getElementById('st-total').textContent=totalDays;document.getElementById('st-subs').textContent=subjects.length;
+  document.getElementById('st-rem').textContent=rem;document.getElementById('done-pill').textContent=`${done} / ${subjects.length} مكتمل`;
   document.getElementById('warn').classList.toggle('on',asgn>totalDays&&totalDays>0);
 }
-
 function renderList(){
   const list=document.getElementById('sub-list');
   if(!subjects.length){list.innerHTML=`<div class="empty-st"><span class="ico">📋</span><p>لا توجد مواد بعد<br>حدد عدد الأيام ثم أضف أول مادة</p></div>`;return;}
   list.innerHTML=curView==='simple'?subjects.map((s,i)=>simpleRow(s,i)).join(''):subjects.map((s,i)=>detailBlock(s,i)).join('');
   initDrag();
 }
-
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function simpleRow(s,i){
   const pct=totalDays>0?Math.min(100,(s.days/totalDays)*100):0;
-  return `<div class="sub-row${s.done?' done-row':''}" data-id="${s.id}" style="animation:rowIn .2s ease ${i*.04}s both">
-    <div class="drag-handle"><svg viewBox="0 0 10 16" fill="none"><circle cx="3" cy="2.5" r="1.1" fill="currentColor"/><circle cx="7" cy="2.5" r="1.1" fill="currentColor"/><circle cx="3" cy="8" r="1.1" fill="currentColor"/><circle cx="7" cy="8" r="1.1" fill="currentColor"/><circle cx="3" cy="13.5" r="1.1" fill="currentColor"/><circle cx="7" cy="13.5" r="1.1" fill="currentColor"/></svg></div>
-    <div class="row-stripe" style="background:${s.color.hex}"></div>
-    <div class="row-body">
-      <input class="sname" data-sname="${s.id}" value="${esc(s.name)}" placeholder="اسم المادة" oninput="setName(${s.id},this.value)" onchange="setName(${s.id},this.value)">
-      <div class="row-bar"><div class="row-bar-f" data-bar="${s.id}" style="width:${pct}%;background:${s.color.hex}"></div></div>
-    </div>
-    <div class="row-right">
-      <div class="stepper">
-        <button class="stp-b" onclick="step(${s.id},-1)">−</button>
-        <input class="stp-i" type="number" min="0" data-sdays="${s.id}" value="${s.days}" oninput="setDays(${s.id},this.value)" onchange="setDays(${s.id},this.value)">
-        <button class="stp-b" onclick="step(${s.id},1)">+</button>
-      </div>
-      <div class="row-btns">
-        <button class="chk-btn${s.done?' on':''}" onclick="toggleDone(${s.id})">${s.done?'✓':''}</button>
-        <button class="del-btn" onclick="deleteSubject(${s.id})">✕</button>
-      </div>
-    </div>
-  </div>`;
+  return `<div class="sub-row${s.done?' done-row':''}" data-id="${s.id}" style="animation:rowIn .2s ease ${i*.04}s both"><div class="drag-handle"><svg viewBox="0 0 10 16" fill="none"><circle cx="3" cy="2.5" r="1.1" fill="currentColor"/><circle cx="7" cy="2.5" r="1.1" fill="currentColor"/><circle cx="3" cy="8" r="1.1" fill="currentColor"/><circle cx="7" cy="8" r="1.1" fill="currentColor"/><circle cx="3" cy="13.5" r="1.1" fill="currentColor"/><circle cx="7" cy="13.5" r="1.1" fill="currentColor"/></svg></div><div class="row-stripe" style="background:${s.color.hex}"></div><div class="row-body"><input class="sname" data-sname="${s.id}" value="${esc(s.name)}" placeholder="اسم المادة" oninput="setName(${s.id},this.value)" onchange="setName(${s.id},this.value)"><div class="row-bar"><div class="row-bar-f" data-bar="${s.id}" style="width:${pct}%;background:${s.color.hex}"></div></div></div><div class="row-right"><div class="stepper"><button class="stp-b" onclick="step(${s.id},-1)">−</button><input class="stp-i" type="number" min="0" data-sdays="${s.id}" value="${s.days}" oninput="setDays(${s.id},this.value)" onchange="setDays(${s.id},this.value)"><button class="stp-b" onclick="step(${s.id},1)">+</button></div><div class="row-btns"><button class="chk-btn${s.done?' on':''}" onclick="toggleDone(${s.id})">${s.done?'✓':''}</button><button class="del-btn" onclick="deleteSubject(${s.id})">✕</button></div></div></div>`;
 }
-
 function detailBlock(s,i){
   const pct=totalDays>0?Math.min(100,(s.days/totalDays)*100):0;
-  const bd=getBaseDate();
-  let cumDay=0;subjects.slice(0,i).forEach(x=>cumDay+=x.days);
+  const bd=getBaseDate();let cumDay=0;subjects.slice(0,i).forEach(x=>cumDay+=x.days);
   const dayInputs=Array.from({length:s.days},(_,di)=>{
-    const d=new Date(bd);d.setDate(d.getDate()+cumDay+di);
-    const dateStr=fmtDate(d);
-    const lbl=(s.dayLabels&&s.dayLabels[di])||'';
+    const d=new Date(bd);d.setDate(d.getDate()+cumDay+di);const dateStr=fmtDate(d);const lbl=(s.dayLabels&&s.dayLabels[di])||'';
     return `<div class="day-inp-row"><span class="day-inp-num">اليوم ${di+1}</span><input class="day-inp" placeholder="ما الذي ستدرسه؟" value="${esc(lbl)}" oninput="setDayLabel(${s.id},${di},this.value)"><span class="day-date-lbl">${dateStr}</span></div>`;
   }).join('');
-  return `<div class="sub-block" data-id="${s.id}" style="animation:rowIn .2s ease ${i*.04}s both">
-    <div class="sub-block-hdr">
-      <div class="drag-handle"><svg viewBox="0 0 10 16" fill="none"><circle cx="3" cy="2.5" r="1.1" fill="currentColor"/><circle cx="7" cy="2.5" r="1.1" fill="currentColor"/><circle cx="3" cy="8" r="1.1" fill="currentColor"/><circle cx="7" cy="8" r="1.1" fill="currentColor"/><circle cx="3" cy="13.5" r="1.1" fill="currentColor"/><circle cx="7" cy="13.5" r="1.1" fill="currentColor"/></svg></div>
-      <div class="row-stripe" style="background:${s.color.hex}"></div>
-      <div class="row-body">
-        <input class="sname" data-sname="${s.id}" value="${esc(s.name)}" placeholder="اسم المادة" oninput="setName(${s.id},this.value)" onchange="setName(${s.id},this.value)">
-        <div class="row-bar"><div class="row-bar-f" data-bar="${s.id}" style="width:${pct}%;background:${s.color.hex}"></div></div>
-      </div>
-      <div class="row-right">
-        <div class="stepper">
-          <button class="stp-b" onclick="step(${s.id},-1)">−</button>
-          <input class="stp-i" type="number" min="0" data-sdays="${s.id}" value="${s.days}" oninput="setDays(${s.id},this.value)" onchange="setDays(${s.id},this.value)">
-          <button class="stp-b" onclick="step(${s.id},1)">+</button>
-        </div>
-        <div class="row-btns">
-          <button class="chk-btn${s.done?' on':''}" onclick="toggleDone(${s.id})">${s.done?'✓':''}</button>
-          <button class="del-btn" onclick="deleteSubject(${s.id})">✕</button>
-        </div>
-      </div>
-    </div>
-    <div class="sub-block-expand">
-      <div class="expand-toggle" onclick="toggleExpand(this)" id="et-${s.id}">
-        <span class="et-icon">▼</span>
-        <span>تفاصيل الأيام (${s.days})</span>
-      </div>
-      <div class="day-inputs" id="di-${s.id}">${dayInputs}</div>
-    </div>
-  </div>`;
+  return `<div class="sub-block" data-id="${s.id}" style="animation:rowIn .2s ease ${i*.04}s both"><div class="sub-block-hdr"><div class="drag-handle"><svg viewBox="0 0 10 16" fill="none"><circle cx="3" cy="2.5" r="1.1" fill="currentColor"/><circle cx="7" cy="2.5" r="1.1" fill="currentColor"/><circle cx="3" cy="8" r="1.1" fill="currentColor"/><circle cx="7" cy="8" r="1.1" fill="currentColor"/><circle cx="3" cy="13.5" r="1.1" fill="currentColor"/><circle cx="7" cy="13.5" r="1.1" fill="currentColor"/></svg></div><div class="row-stripe" style="background:${s.color.hex}"></div><div class="row-body"><input class="sname" data-sname="${s.id}" value="${esc(s.name)}" placeholder="اسم المادة" oninput="setName(${s.id},this.value)" onchange="setName(${s.id},this.value)"><div class="row-bar"><div class="row-bar-f" data-bar="${s.id}" style="width:${pct}%;background:${s.color.hex}"></div></div></div><div class="row-right"><div class="stepper"><button class="stp-b" onclick="step(${s.id},-1)">−</button><input class="stp-i" type="number" min="0" data-sdays="${s.id}" value="${s.days}" oninput="setDays(${s.id},this.value)" onchange="setDays(${s.id},this.value)"><button class="stp-b" onclick="step(${s.id},1)">+</button></div><div class="row-btns"><button class="chk-btn${s.done?' on':''}" onclick="toggleDone(${s.id})">${s.done?'✓':''}</button><button class="del-btn" onclick="deleteSubject(${s.id})">✕</button></div></div></div><div class="sub-block-expand"><div class="expand-toggle" onclick="toggleExpand(this)" id="et-${s.id}"><span class="et-icon">▼</span><span>تفاصيل الأيام (${s.days})</span></div><div class="day-inputs" id="di-${s.id}">${dayInputs}</div></div></div>`;
 }
-
-function toggleExpand(el){
-  el.classList.toggle('open');
-  const di=el.parentElement.querySelector('.day-inputs');
-  if(di){di.classList.toggle('open');sndTick();}
-}
-
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toggleExpand(el){el.classList.toggle('open');const di=el.parentElement.querySelector('.day-inputs');if(di){di.classList.toggle('open');sndTick();}}
 
 /* ── Drag ── */
 let draggedId=null,ghostEl=null,ghostOffY=0;
-function initDrag(){
-  document.querySelectorAll('.drag-handle').forEach(h=>{h.addEventListener('pointerdown',onPD,{passive:false});});
-}
-function onPD(e){
-  if(e.button&&e.button!==0)return;e.preventDefault();
-  const row=e.currentTarget.closest('[data-id]');draggedId=parseInt(row.dataset.id);
-  const rect=row.getBoundingClientRect();ghostOffY=e.clientY-rect.top;
-  ghostEl=row.cloneNode(true);
-  ghostEl.style.cssText=`position:fixed;z-index:8888;width:${rect.width}px;left:${rect.left}px;top:${rect.top}px;margin:0;pointer-events:none;opacity:.82;box-shadow:0 14px 44px rgba(0,0,0,.5);transition:none;border-radius:14px;`;
-  document.body.appendChild(ghostEl);row.classList.add('dragging');
-  document.addEventListener('pointermove',onPM,{passive:false});
-  document.addEventListener('pointerup',onPU);document.addEventListener('pointercancel',onPU);beep(420,.07,.04);
-}
-function onPM(e){
-  e.preventDefault();if(!ghostEl)return;ghostEl.style.top=(e.clientY-ghostOffY)+'px';
-  const rows=[...document.querySelectorAll('[data-id]:not(.dragging)')];rows.forEach(r=>r.classList.remove('drag-over'));
-  let t=null;for(const r of rows){const rc=r.getBoundingClientRect();if(e.clientY<rc.top+rc.height/2){t=r;break;}}
-  if(t)t.classList.add('drag-over');
-}
-function onPU(e){
-  document.removeEventListener('pointermove',onPM);document.removeEventListener('pointerup',onPU);document.removeEventListener('pointercancel',onPU);
-  const rows=[...document.querySelectorAll('[data-id]:not(.dragging)')];rows.forEach(r=>r.classList.remove('drag-over'));
-  let insertIdx=subjects.length;
-  for(let i=0;i<rows.length;i++){const rc=rows[i].getBoundingClientRect();if(e.clientY<rc.top+rc.height/2){insertIdx=subjects.findIndex(s=>s.id===parseInt(rows[i].dataset.id));break;}}
-  const srcIdx=subjects.findIndex(s=>s.id===draggedId);
-  if(srcIdx!==-1&&srcIdx!==insertIdx){const[m]=subjects.splice(srcIdx,1);subjects.splice(insertIdx>srcIdx?insertIdx-1:insertIdx,0,m);beep(500,.08,.04);}
-  if(ghostEl){ghostEl.remove();ghostEl=null;}draggedId=null;renderList();refresh();
-}
+function initDrag(){document.querySelectorAll('.drag-handle').forEach(h=>{h.addEventListener('pointerdown',onPD,{passive:false});});}
+function onPD(e){if(e.button&&e.button!==0)return;e.preventDefault();const row=e.currentTarget.closest('[data-id]');draggedId=parseInt(row.dataset.id);const rect=row.getBoundingClientRect();ghostOffY=e.clientY-rect.top;ghostEl=row.cloneNode(true);ghostEl.style.cssText=`position:fixed;z-index:8888;width:${rect.width}px;left:${rect.left}px;top:${rect.top}px;margin:0;pointer-events:none;opacity:.82;box-shadow:0 14px 44px rgba(0,0,0,.5);transition:none;border-radius:14px;`;document.body.appendChild(ghostEl);row.classList.add('dragging');document.addEventListener('pointermove',onPM,{passive:false});document.addEventListener('pointerup',onPU);document.addEventListener('pointercancel',onPU);beep(420,.07,.04);}
+function onPM(e){e.preventDefault();if(!ghostEl)return;ghostEl.style.top=(e.clientY-ghostOffY)+'px';const rows=[...document.querySelectorAll('[data-id]:not(.dragging)')];rows.forEach(r=>r.classList.remove('drag-over'));let t=null;for(const r of rows){const rc=r.getBoundingClientRect();if(e.clientY<rc.top+rc.height/2){t=r;break;}}if(t)t.classList.add('drag-over');}
+function onPU(e){document.removeEventListener('pointermove',onPM);document.removeEventListener('pointerup',onPU);document.removeEventListener('pointercancel',onPU);const rows=[...document.querySelectorAll('[data-id]:not(.dragging)')];rows.forEach(r=>r.classList.remove('drag-over'));let insertIdx=subjects.length;for(let i=0;i<rows.length;i++){const rc=rows[i].getBoundingClientRect();if(e.clientY<rc.top+rc.height/2){insertIdx=subjects.findIndex(s=>s.id===parseInt(rows[i].dataset.id));break;}}const srcIdx=subjects.findIndex(s=>s.id===draggedId);if(srcIdx!==-1&&srcIdx!==insertIdx){const[m]=subjects.splice(srcIdx,1);subjects.splice(insertIdx>srcIdx?insertIdx-1:insertIdx,0,m);beep(500,.08,.04);}if(ghostEl){ghostEl.remove();ghostEl=null;}draggedId=null;renderList();refresh();saveData();}
 
 /* ── Export ── */
-function doExport(){
-  if(!subjects.length){showToast('⚠ أضف مواد أولاً');return;}
-  curView==='simple'?exportSimple():exportDetail();
-}
+function doExport(){if(!subjects.length){showToast('⚠ أضف مواد أولاً');return;}openFmt();}
+async function exportAs(fmt){if(curView==='simple')await buildSimple(fmt);else await buildDetail(fmt);}
 
-async function exportSimple(){
+async function buildSimple(fmt){
   sndExport();const tpl=document.getElementById('pdf-tmpl');const dk=isDark,cls=dk?'dk':'lt';
   const today=new Date().toLocaleDateString('ar',{year:'numeric',month:'long',day:'numeric'});
   const subLine=dateFrom&&dateTo?`${dateFrom} — ${dateTo}`:`إجمالي الأيام: ${totalDays}  |  المواد: ${subjects.length}`;
-  const bd=getBaseDate();const n=subjects.length;
-  const rowPad=Math.max(4,Math.min(11,Math.floor((384-n*20)/(n*2))));
+  const bd=getBaseDate();const n=subjects.length;const rowPad=Math.max(4,Math.min(11,Math.floor((384-n*20)/(n*2))));
   let cum=0;
-  const rowsH=subjects.map((s,i)=>{
-    let dr='';
-    if(bd&&s.days>0){const st=new Date(bd);st.setDate(st.getDate()+cum);const en=new Date(bd);en.setDate(en.getDate()+cum+s.days-1);dr=`<span class="pt-date-r">${fmtDate(st)} — ${fmtDate(en)}</span>`;}
-    cum+=s.days;
-    return `<div class="pt-row" style="padding:${rowPad}px 0"><div class="pt-stripe" style="background:${s.color.hex}"></div><div class="pt-circ-wrap"><div class="pt-circ" style="border-color:${s.color.hex};${s.done?`background:${s.color.hex}`:''}"></div></div><div class="pt-name">${esc(s.name||`مادة ${i+1}`)}</div>${dr}<div class="pt-days"><span class="pt-days-n" style="color:${s.color.hex}">${s.days}</span><span class="pt-days-l">يوم</span></div></div>`;
-  }).join('');
+  const rowsH=subjects.map((s,i)=>{let dr='';if(bd&&s.days>0){const st=new Date(bd);st.setDate(st.getDate()+cum);const en=new Date(bd);en.setDate(en.getDate()+cum+s.days-1);dr=`<span class="pt-date-r">${fmtDate(st)} — ${fmtDate(en)}</span>`;}cum+=s.days;return `<div class="pt-row" style="padding:${rowPad}px 0"><div class="pt-stripe" style="background:${s.color.hex}"></div><div class="pt-circ-wrap"><div class="pt-circ" style="border-color:${s.color.hex};${s.done?`background:${s.color.hex}`:''}"></div></div><div class="pt-name">${esc(s.name||`مادة ${i+1}`)}</div>${dr}<div class="pt-days"><span class="pt-days-n" style="color:${s.color.hex}">${s.days}</span><span class="pt-days-l">يوم</span></div></div>`;}).join('');
   tpl.className=cls;
   tpl.innerHTML=`<div class="pt-wrap"><div class="pt-hdr"><div class="pt-hdr-grd"></div><div class="pt-hdr-in"><div class="pt-title">الجدول الدراسي</div><div class="pt-right"><div class="pt-count">${n} مواد دراسية</div><div class="pt-sub">${subLine}</div></div></div><div class="pt-hdr-line"></div></div><div class="pt-rows">${rowsH}</div><div class="pt-note"><span>○</span><span class="pt-note-txt">الدائرة الفارغة أمام كل مادة — لوّنها أو ضع علامة ✓ بعد إتمامها عند الطباعة</span></div><div class="pt-foot"><span class="pt-foot-l">© جميع الحقوق محفوظة · x150ll · ${today}</span><span class="pt-foot-r">https://studysmarter.pages.dev</span></div></div>`;
-  await renderPDF(tpl,dk,'study-schedule.pdf');
+  await renderExport(tpl,dk,fmt,'study-schedule');
 }
 
-async function exportDetail(){
+async function buildDetail(fmt){
   sndExport();const tpl=document.getElementById('pdf-det');const dk=isDark,cls=dk?'dk':'lt';
   const today=new Date().toLocaleDateString('ar',{year:'numeric',month:'long',day:'numeric'});
   const bd=getBaseDate();const totalDC=subjects.reduce((a,s)=>a+s.days,0);
@@ -832,54 +861,54 @@ async function exportDetail(){
   const dayFz=totalDC>80?'.6rem':totalDC>50?'.64rem':'.7rem';
   const dayPd=totalDC>80?'3px 5px':totalDC>50?'3px 6px':'4px 7px';
   let cum=0;
-  const colsH=subjects.map((s,si)=>{
-    const nm=s.name||`مادة ${si+1}`;
-    let sdr='';
-    if(bd&&s.days>0){const st=new Date(bd);st.setDate(st.getDate()+cum);const en=new Date(bd);en.setDate(en.getDate()+cum+s.days-1);sdr=`<span class="pd-sub-dates">${fmtDate(st)} — ${fmtDate(en)}</span>`;}
-    const drows=Array.from({length:s.days},(_,i)=>{
-      let dt='';if(bd){const d=new Date(bd);d.setDate(d.getDate()+cum+i);dt=fmtDate(d);}
-      const lbl=(s.dayLabels&&s.dayLabels[i])||'';const txt=lbl||`اليوم ${i+1}`;
-      return `<div class="pd-day-row ${i%2===0?'pd-row-odd':'pd-row-even'}" style="padding:${dayPd};"><div class="pd-day-chk" style="border-color:${s.color.hex};width:10px;height:10px"></div><span class="pd-day-nm" style="font-size:${dayFz};min-width:38px">${txt}</span>${dt?`<span class="pd-day-dt" style="font-size:${dayFz}">${dt}</span>`:''}</div>`;
-    }).join('');
-    cum+=s.days;
-    return `<div class="pd-subj"><div class="pd-sub-hdr"><div class="pd-sub-dot" style="background:${s.color.hex};box-shadow:0 0 4px ${s.color.hex}66"></div><span class="pd-sub-nm">${esc(nm)}</span>${sdr}<span class="pd-sub-meta">${s.days} أيام</span></div><div class="pd-days-wrap">${drows}</div></div>`;
-  }).join('');
+  const colsH=subjects.map((s,si)=>{const nm=s.name||`مادة ${si+1}`;let sdr='';if(bd&&s.days>0){const st=new Date(bd);st.setDate(st.getDate()+cum);const en=new Date(bd);en.setDate(en.getDate()+cum+s.days-1);sdr=`<span class="pd-sub-dates">${fmtDate(st)} — ${fmtDate(en)}</span>`;}const drows=Array.from({length:s.days},(_,i)=>{let dt='';if(bd){const d=new Date(bd);d.setDate(d.getDate()+cum+i);dt=fmtDate(d);}const lbl=(s.dayLabels&&s.dayLabels[i])||'';const txt=lbl||`اليوم ${i+1}`;return `<div class="pd-day-row ${i%2===0?'pd-row-odd':'pd-row-even'}" style="padding:${dayPd};"><div class="pd-day-chk" style="border-color:${s.color.hex};width:10px;height:10px"></div><span class="pd-day-nm" style="font-size:${dayFz};min-width:38px">${txt}</span>${dt?`<span class="pd-day-dt" style="font-size:${dayFz}">${dt}</span>`:''}</div>`;}).join('');cum+=s.days;return `<div class="pd-subj"><div class="pd-sub-hdr"><div class="pd-sub-dot" style="background:${s.color.hex};box-shadow:0 0 4px ${s.color.hex}66"></div><span class="pd-sub-nm">${esc(nm)}</span>${sdr}<span class="pd-sub-meta">${s.days} أيام</span></div><div class="pd-days-wrap">${drows}</div></div>`;}).join('');
   const titleStr=dateFrom&&dateTo?`${dateFrom} — ${dateTo}`:`إجمالي الأيام: ${totalDays}`;
   tpl.className=cls;
   tpl.innerHTML=`<div class="pd-top-hdr"><div class="pd-top-hdr-grd"></div><div class="pd-top-hdr-in"><div class="pd-top-title">الجدول الدراسي</div><div class="pd-top-right"><div class="pd-top-count">${subjects.length} مواد دراسية</div><div class="pd-top-sub">${titleStr}</div></div></div><div class="pd-top-hdr-line"></div></div><div class="pd-cols" style="grid-template-columns:repeat(${numCols},1fr)">${colsH}</div><div class="pd-note"><span>○</span><span class="pd-note-txt">المربع الفارغ أمام كل يوم — ضع علامة ✓ أو لوّنه بعد إتمام مراجعة ذلك اليوم عند الطباعة</span></div><div class="pd-foot"><span class="pd-foot-l">© جميع الحقوق محفوظة · x150ll · ${today}</span><span class="pd-foot-r">https://studysmarter.pages.dev</span></div>`;
-  await renderPDF(tpl,dk,curView==='simple'?'study-schedule.pdf':'study-schedule-detailed.pdf');
+  await renderExport(tpl,dk,fmt,'study-schedule-detailed');
 }
 
-async function renderPDF(tpl,dk,fname){
+/* ── Core renderer: fixed multipage pixel-accurate splitting ── */
+async function renderExport(tpl,dk,fmt,baseName){
   tpl.style.display='block';document.getElementById('pdf-ld').classList.remove('hidden');
-  await document.fonts.ready;await new Promise(r=>setTimeout(r,220));
+  await document.fonts.ready;await new Promise(r=>setTimeout(r,280));
   try{
     const bg=dk?'#04091a':'#deeefb';
     const canvas=await html2canvas(tpl,{scale:3,useCORS:true,allowTaint:true,backgroundColor:bg,logging:false,width:900,height:tpl.scrollHeight,windowWidth:900});
-    const iW=canvas.width,iH=canvas.height,pW=297,pH=210,m=10,maxW=pW-m*2,maxH=pH-m*2;
-    let fw=maxW,fh=fw*(iH/iW);
-    const{jsPDF}=window.jspdf;
-    const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
-    const bgArr=dk?[4,9,26]:[222,238,251];
-    if(fh<=maxH){
-      doc.setFillColor(...bgArr);doc.rect(0,0,pW,pH,'F');
-      doc.addImage(canvas.toDataURL('image/jpeg',.97),'JPEG',m,(pH-fh)/2,fw,fh);
+    const iW=canvas.width,iH=canvas.height;
+    if(fmt==='jpg'){
+      const a=document.createElement('a');a.href=canvas.toDataURL('image/jpeg',.95);a.download=baseName+'.jpg';a.click();
+      showToast('✅ تم تحميل الصورة بنجاح!');
     } else {
-      const slPxH=Math.floor(iH*(maxH/fh));const pages=Math.ceil(iH/slPxH);
-      for(let p=0;p<pages;p++){
-        if(p>0)doc.addPage();doc.setFillColor(...bgArr);doc.rect(0,0,pW,pH,'F');
-        const srcY=p*slPxH,srcH=Math.min(slPxH,iH-srcY);if(srcH<=0)break;
-        const sl=document.createElement('canvas');sl.width=iW;sl.height=srcH;
-        sl.getContext('2d').drawImage(canvas,0,srcY,iW,srcH,0,0,iW,srcH);
-        doc.addImage(sl.toDataURL('image/jpeg',.97),'JPEG',m,m,fw,(srcH/iH)*fh);
+      const pW=297,pH=210,m=10,maxW=pW-m*2,maxH=pH-m*2;
+      const mmPerPx=maxW/iW;
+      const totalMmH=iH*mmPerPx;
+      const{jsPDF}=window.jspdf;
+      const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+      const bgArr=dk?[4,9,26]:[222,238,251];
+      if(totalMmH<=maxH){
+        doc.setFillColor(...bgArr);doc.rect(0,0,pW,pH,'F');
+        doc.addImage(canvas.toDataURL('image/jpeg',.97),'JPEG',m,(pH-totalMmH)/2,maxW,totalMmH);
+      } else {
+        const sliceHpx=Math.floor(maxH/mmPerPx);
+        const pages=Math.ceil(iH/sliceHpx);
+        for(let p=0;p<pages;p++){
+          if(p>0)doc.addPage();doc.setFillColor(...bgArr);doc.rect(0,0,pW,pH,'F');
+          const srcY=p*sliceHpx;const srcH=Math.min(sliceHpx,iH-srcY);if(srcH<=0)break;
+          const sl=document.createElement('canvas');sl.width=iW;sl.height=srcH;
+          sl.getContext('2d').drawImage(canvas,0,srcY,iW,srcH,0,0,iW,srcH);
+          doc.addImage(sl.toDataURL('image/jpeg',.97),'JPEG',m,m,maxW,srcH*mmPerPx);
+        }
       }
+      doc.save(baseName+'.pdf');showToast('✅ تم تحميل الجدول بنجاح!');
     }
-    doc.save(fname);showToast('✅ تم تحميل الجدول بنجاح!');
   }catch(e){showToast('❌ حدث خطأ أثناء التحميل');console.error(e);}
   tpl.style.display='none';tpl.innerHTML='';document.getElementById('pdf-ld').classList.add('hidden');
 }
 
+loadData();
 refresh();
+renderList();
 </script>
 </body>
 </html>
