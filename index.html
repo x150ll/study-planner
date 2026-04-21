@@ -13,12 +13,12 @@
 
 <!-- ══ Google Analytics ══ -->
 <!-- استبدل G-XXXXXXXXXX بمعرف القياس الخاص بك من Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0R60D6SZ6J"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
+  gtag('config', 'G-0R60D6SZ6J');
 </script>
 <!-- ════════════════════════ -->
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -914,18 +914,52 @@ async function buildDetail(fmt){
   const safeCuts=[];
   const forbiddenRanges=[];
 
+  /* For each subject header, record a "must-come-with" zone:
+     The header + its first 2 day rows must stay together.
+     If cutting between header-top and day2-bottom would split them,
+     we treat that whole zone as forbidden. */
   hdrEls.forEach(el=>{
-    const top=getTopRelToTpl(el);
-    const bot=top+el.offsetHeight;
-    forbiddenRanges.push({start:top,end:bot});
-    if(top>20)safeCuts.push(top);   /* cut point = exactly at header top */
+    const hTop=getTopRelToTpl(el);
+    const hBot=hTop+el.offsetHeight;
+    /* forbidden: never cut inside the header itself */
+    forbiddenRanges.push({start:hTop, end:hBot});
+
+    /* find this subject's day rows (siblings inside the same pd-subj) */
+    const wrap=el.closest('.pd-subj');
+    if(wrap){
+      const days=[...wrap.querySelectorAll('[data-row]')];
+      /* get bottom of 2nd day row (index 1), or 1st if only 1 day */
+      const anchorDay=days[1]||days[0];
+      if(anchorDay){
+        const anchorBot=getTopRelToTpl(anchorDay)+anchorDay.offsetHeight;
+        /* forbidden: cutting between header-top and anchor-bottom splits the pair */
+        forbiddenRanges.push({start:hTop, end:anchorBot});
+        /* safe cut point = just at header top (entire subject moves to next page) */
+        if(hTop>20)safeCuts.push(hTop);
+      } else {
+        /* no days — just protect the header */
+        if(hTop>20)safeCuts.push(hTop);
+      }
+    } else {
+      if(hTop>20)safeCuts.push(hTop);
+    }
   });
 
+  /* safe after every day row */
   dayRowEls.forEach(el=>{
     const top=getTopRelToTpl(el);
     const bot=top+el.offsetHeight;
     if(bot>0&&bot<tpl.scrollHeight-10)safeCuts.push(bot);
   });
+
+  /* merge overlapping forbidden ranges */
+  forbiddenRanges.sort((a,b)=>a.start-b.start);
+  const merged=[];
+  for(const r of forbiddenRanges){
+    if(merged.length&&r.start<=merged[merged.length-1].end)
+      merged[merged.length-1].end=Math.max(merged[merged.length-1].end,r.end);
+    else merged.push({...r});
+  }
 
   safeCuts.sort((a,b)=>a-b);
   tpl.style.visibility='';
@@ -951,7 +985,7 @@ async function buildDetail(fmt){
 
       /* Scale safe cuts and forbidden zones from CSS px → canvas px */
       const scaledCuts=safeCuts.map(y=>Math.round(y*scale));
-      const scaledForbidden=forbiddenRanges.map(z=>({s:Math.round(z.start*scale),e:Math.round(z.end*scale)}));
+      const scaledForbidden=merged.map(z=>({s:Math.round(z.start*scale),e:Math.round(z.end*scale)}));
 
       function inForbidden(y){return scaledForbidden.some(z=>y>z.s&&y<z.e);}
 
