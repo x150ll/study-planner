@@ -1,0 +1,5 @@
+https://studysmarter.pages.dev/*
+  X-Robots-Tag: all
+
+https://:version.studysmarter.pages.dev/*
+  X-Robots-Tag: noindex
